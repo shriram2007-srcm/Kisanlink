@@ -4,7 +4,7 @@ KisanLink helps small farmers decide **when and where to sell their crops**. It 
 
 Built for **INNOVATE INDIA Hackathon 2026, Round 2: Project Development**.
 
-**Live demo:** https://shriram2007-srcm.github.io/kisanlink
+**Live demo:**[ https://shriram2007-srcm.github.io/kisanlink](https://shriram2007-srcm.github.io/Kisanlink/)
 
 ## The problem
 

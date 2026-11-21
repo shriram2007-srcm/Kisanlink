@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KisanLink: Mandi price & sell advice</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#e9efe6;--card:#fbfcf9;--ink:#22304a;--mute:#5f6b7d;--line:#cfd9ca;--gold:#e0a100;--gold-ink:#5a4000;--up:#1f7a4d;--down:#b4372b;--brand:#22304a;--brand-ink:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161d17;--card:#212a22;--ink:#eaf0e6;--mute:#a3b0a2;--line:#33402f;--gold:#f0b72a;--gold-ink:#2a1e00;--up:#5fd08f;--down:#ff8a7d;--brand:#f0b72a;--brand-ink:#2a1e00}}
+:root[data-theme="dark"]{--bg:#161d17;--card:#212a22;--ink:#eaf0e6;--mute:#a3b0a2;--line:#33402f;--gold:#f0b72a;--gold-ink:#2a1e00;--up:#5fd08f;--down:#ff8a7d;--brand:#f0b72a;--brand-ink:#2a1e00}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Mukta','Noto Sans Tamil','Noto Sans Devanagari',system-ui,sans-serif;font-size:17px;line-height:1.45}
+.app{max-width:480px;margin:0 auto;padding:16px 16px 40px}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:14px}
+h1{font-size:26px;font-weight:800;margin:0;letter-spacing:-.3px}
+.lang{display:flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden}
+.lang button{border:0;background:transparent;color:var(--ink);font:inherit;font-size:14px;font-weight:600;padding:5px 11px;cursor:pointer}
+.lang button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+label{display:block;font-weight:600;font-size:15px;color:var(--mute);margin-bottom:4px}
+select,input[type=number]{width:100%;font:inherit;font-size:18px;padding:10px 12px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.advice{background:var(--brand);color:var(--brand-ink);border-radius:14px;padding:16px;margin-bottom:12px}
+.advice .big{font-size:24px;font-weight:800;line-height:1.2}
+.advice p{margin:6px 0 0;font-size:16px;opacity:.92}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btn{font:inherit;font-weight:600;font-size:16px;padding:9px 14px;border-radius:10px;border:2px solid currentColor;background:transparent;color:inherit;cursor:pointer}
+.btn.solid{background:var(--gold);border-color:var(--gold);color:var(--gold-ink)}
+.alert{background:var(--gold);color:var(--gold-ink);border-radius:12px;padding:12px 14px;margin-bottom:12px;font-weight:600}
+.alert[hidden]{display:none}
+h2{font-size:18px;margin:0 0 10px;font-weight:800}
+.m{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:10px 0;border-top:1px solid var(--line)}
+.m:first-of-type{border-top:0}
+.m .n{font-weight:600}.m .s{color:var(--mute);font-size:14px}
+.m .p{font-weight:800;font-size:20px;text-align:right}
+.m .net{font-size:14px;text-align:right;color:var(--mute)}
+.m.best{background:color-mix(in srgb,var(--gold) 22%,transparent);margin:0 -8px;padding:10px 8px;border-radius:10px;border-top-color:transparent}
+.tag{display:inline-block;background:var(--gold);color:var(--gold-ink);font-size:12px;font-weight:800;border-radius:6px;padding:1px 7px;margin-left:6px}
+svg{width:100%;height:auto;display:block}
+.legend{display:flex;gap:14px;font-size:13px;color:var(--mute);margin-top:4px}
+.b{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-top:1px solid var(--line)}
+.b:first-of-type{border-top:0}
+.b a{color:var(--ink);font-weight:800;border:2px solid var(--ink);border-radius:10px;padding:5px 12px;text-decoration:none}
+.note{font-size:13px;color:var(--mute);margin-top:8px}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>KisanLink</h1>
+    <div class="lang" role="group" aria-label="Language">
+      <button data-l="en" aria-pressed="true">EN</button>
+      <button data-l="ta" aria-pressed="false">தமிழ்</button>
+      <button data-l="hi" aria-pressed="false">हिं</button>
+    </div>
+  </header>
+
+  <div class="alert" id="alert" role="status" hidden></div>
+
+  <div class="card">
+    <label for="crop" id="lCrop"></label>
+    <select id="crop"></select>
+  </div>
+
+  <div class="advice" aria-live="polite">
+    <div class="big" id="adv"></div>
+    <p id="advSub"></p>
+    <div class="row">
+      <button class="btn solid" id="speak"></button>
+      <button class="btn" id="sim"></button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 id="hMk"></h2>
+    <div id="markets"></div>
+    <p class="note" id="nTrans"></p>
+  </div>
+
+  <div class="card">
+    <h2 id="hTr"></h2>
+    <svg id="chart" viewBox="0 0 320 130" role="img" aria-label="Price trend chart"></svg>
+    <div class="legend"><span id="lgNow"></span><span id="lgFc"></span></div>
+  </div>
+
+  <div class="card">
+    <h2 id="hAl"></h2>
+    <label for="target" id="lTarget"></label>
+    <input type="number" id="target" inputmode="numeric" min="0" step="50">
+  </div>
+
+  <div class="card">
+    <h2 id="hBy"></h2>
+    <div id="buyers"></div>
+  </div>
+
+  <p class="note" id="foot"></p>
+</div>
+
+<script>
+const CROPS={tomato:{en:'Tomato',ta:'தக்காளி',hi:'टमाटर',base:2200},onion:{en:'Onion',ta:'வெங்காயம்',hi:'प्याज़',base:2600},banana:{en:'Banana',ta:'வாழைப்பழம்',hi:'केला',base:3100},groundnut:{en:'Groundnut',ta:'நிலக்கடலை',hi:'मूँगफली',base:6200},paddy:{en:'Paddy',ta:'நெல்',hi:'धान',base:2350}};
+const MK=[{en:'Madurai',ta:'மதுரை',hi:'मदुरै',km:8,f:1.00},{en:'Dindigul',ta:'திண்டுக்கல்',hi:'डिंडीगुल',km:65,f:1.04},{en:'Theni',ta:'தேனி',hi:'थेनी',km:75,f:0.97},{en:'Tiruchirappalli',ta:'திருச்சி',hi:'तिरुचिरापल्ली',km:135,f:1.08},{en:'Coimbatore',ta:'கோயம்புத்தூர்',hi:'कोयंबटूर',km:215,f:1.12}];
+const BUY=[{en:'Annai Fresh Traders',ta:'அன்னை ஃப்ரெஷ் டிரேடர்ஸ்',hi:'अन्नई फ्रेश ट्रेडर्स',loc:'Madurai',tel:'+910000000001'},{en:'Vel Agro Foods',ta:'வேல் அக்ரோ ஃபுட்ஸ்',hi:'वेल एग्रो फूड्स',loc:'Dindigul',tel:'+910000000002'},{en:'Green Basket Co-op',ta:'கிரீன் பாஸ்கெட் கூட்டுறவு',hi:'ग्रीन बास्केट सहकारी',loc:'Theni',tel:'+910000000003'}];
+const TR=2.5; // transport cost, Rs per quintal per km
+const L={
+en:{crop:'Choose your crop',now:d=>`Sell now at ${d.m}`,wait:d=>`Hold 2–3 days, then sell at ${d.m}`,sub:d=>`Best take-home price: ₹${d.net}/quintal after transport. Trend is ${d.dir}.`,up:'rising',flat:'steady',down:'falling',speak:'Read aloud',sim:'Refresh prices',mk:'Nearby markets (₹ per quintal)',nt:'Take-home = price minus transport (₹2.5 per quintal per km).',tr:'Price trend: best market',now2:'Last 7 days',fc:'Next 3 days (forecast)',al:'Price alert',tg:'Alert me when any market reaches (₹/quintal)',hit:(m,p)=>`Alert: ${m} has reached ₹${p}/quintal. Time to sell!`,by:'Direct buyers',call:'Call',km:k=>`${k} km`,best:'Best',net:n=>`Take-home ₹${n}`,foot:'Prototype using sample market data. The full version reads live prices from the government Agmarknet open data API.',lang:'en-IN'},
+ta:{crop:'உங்கள் பயிரைத் தேர்வுசெய்க',now:d=>`இப்போதே ${d.m} சந்தையில் விற்கலாம்`,wait:d=>`2–3 நாள் காத்திருந்து ${d.m} சந்தையில் விற்கவும்`,sub:d=>`போக்குவரத்துக்குப் பிறகு கிடைக்கும் சிறந்த விலை: ₹${d.net}/குவிண்டால். விலைப் போக்கு: ${d.dir}.`,up:'உயர்கிறது',flat:'நிலையாக உள்ளது',down:'குறைகிறது',speak:'படித்துக் காட்டு',sim:'விலைகளைப் புதுப்பி',mk:'அருகிலுள்ள சந்தைகள் (₹ / குவிண்டால்)',nt:'கையில் கிடைப்பது = விலை − போக்குவரத்து (கி.மீ.க்கு ₹2.5 / குவிண்டால்).',tr:'விலைப் போக்கு: சிறந்த சந்தை',now2:'கடந்த 7 நாட்கள்',fc:'அடுத்த 3 நாட்கள் (கணிப்பு)',al:'விலை எச்சரிக்கை',tg:'எந்த சந்தையிலும் இந்த விலையை எட்டினால் தெரிவி (₹/குவிண்டால்)',hit:(m,p)=>`எச்சரிக்கை: ${m} சந்தையில் ₹${p}/குவிண்டால் ஆகிவிட்டது. விற்க நேரம்!`,by:'நேரடி வாங்குபவர்கள்',call:'அழை',km:k=>`${k} கி.மீ`,best:'சிறந்தது',net:n=>`கையில் ₹${n}`,foot:'இது மாதிரி சந்தைத் தரவுடன் உள்ள முன்மாதிரி. முழுப் பதிப்பு அரசின் Agmarknet திறந்த தரவு API-யிலிருந்து நேரடி விலைகளைப் பெறும்.',lang:'ta-IN'},
+hi:{crop:'अपनी फ़सल चुनें',now:d=>`अभी ${d.m} में बेचें`,wait:d=>`2–3 दिन रुकें, फिर ${d.m} में बेचें`,sub:d=>`ढुलाई के बाद सबसे अच्छा भाव: ₹${d.net}/क्विंटल। रुझान: ${d.dir}।`,up:'बढ़ रहा है',flat:'स्थिर है',down:'गिर रहा है',speak:'सुनें',sim:'भाव ताज़ा करें',mk:'पास की मंडियाँ (₹ प्रति क्विंटल)',nt:'हाथ में आया = भाव − ढुलाई (₹2.5 प्रति क्विंटल प्रति किमी)।',tr:'भाव का रुझान: सबसे अच्छी मंडी',now2:'पिछले 7 दिन',fc:'अगले 3 दिन (अनुमान)',al:'भाव अलर्ट',tg:'किसी भी मंडी में इस भाव पर पहुँचे तो बताएँ (₹/क्विंटल)',hit:(m,p)=>`अलर्ट: ${m} में भाव ₹${p}/क्विंटल हो गया। बेचने का समय!`,by:'सीधे खरीदार',call:'फ़ोन करें',km:k=>`${k} किमी`,best:'सबसे अच्छा',net:n=>`हाथ में ₹${n}`,foot:'यह नमूना मंडी डेटा वाला प्रोटोटाइप है। पूरा संस्करण सरकारी Agmarknet ओपन डेटा API से लाइव भाव लेगा।',lang:'hi-IN'}};
+
+let lang='en',crop='tomato',target=0,rs=7;
+const rnd=()=>{rs=(rs*9301+49297)%233280;return rs/233280};
+const H={}; // history[crop][marketIdx] = 7 prices
+Object.keys(CROPS).forEach((c,ci)=>{H[c]=MK.map((m,mi)=>{const out=[];const tr=(rnd()-.35)*.018;for(let d=0;d<7;d++)out.push(Math.round(CROPS[c].base*m.f*(1+tr*d+.03*Math.sin(d*.9+ci+mi))));return out})});
+const $=id=>document.getElementById(id);
+const t=()=>L[lang];
+
+function regress(a){const n=a.length,mx=(n-1)/2,my=a.reduce((x,y)=>x+y,0)/n;let nu=0,de=0;a.forEach((y,i)=>{nu+=(i-mx)*(y-my);de+=(i-mx)*(i-mx)});const s=nu/de;return{s,at:x=>my+s*(x-mx)}}
+
+function analyse(){
+  const rows=MK.map((m,i)=>{const h=H[crop][i];const p=h[h.length-1];return{i,m,p,net:Math.round(p-m.km*TR)}});
+  rows.sort((a,b)=>b.net-a.net);
+  const best=rows[0],h=H[crop][best.i],r=regress(h);
+  const fc=[1,2,3].map(k=>Math.round(r.at(h.length-1+k)));
+  const gain=fc[2]-best.p;
+  const dirKey=gain>best.p*.02?'up':gain<-best.p*.02?'down':'flat';
+  return{rows,best,h,fc,wait:dirKey==='up',dirKey};
+}
+
+function render(){
+  const T=t(),A=analyse();
+  document.documentElement.lang=lang;
+  $('lCrop').textContent=T.crop;
+  const sel=$('crop');sel.innerHTML='';
+  Object.keys(CROPS).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=CROPS[k][lang];if(k===crop)o.selected=true;sel.appendChild(o)});
+  const d={m:A.best.m[lang],net:A.best.net,dir:T[A.dirKey]};
+  $('adv').textContent=A.wait?T.wait(d):T.now(d);
+  $('advSub').textContent=T.sub(d);
+  $('speak').textContent='🔊 '+T.speak;$('sim').textContent=T.sim;
+  $('hMk').textContent=T.mk;$('nTrans').textContent=T.nt;
+  const box=$('markets');box.innerHTML='';
+  A.rows.forEach((r,idx)=>{
+    const el=document.createElement('div');el.className='m'+(idx===0?' best':'');
+    const n=document.createElement('div');n.className='n';n.textContent=r.m.m?'':r.m[lang];
+    if(idx===0){const tg=document.createElement('span');tg.className='tag';tg.textContent=T.best;n.appendChild(tg)}
+    const p=document.createElement('div');p.className='p';p.textContent='₹'+r.p;
+    const s=document.createElement('div');s.className='s';s.textContent=T.km(r.m.km);
+    const nt=document.createElement('div');nt.className='net';nt.textContent=T.net(r.net);
+    el.append(n,p,s,nt);box.appendChild(el);
+  });
+  $('hTr').textContent=T.tr+' ('+A.best.m[lang]+')';
+  $('lgNow').textContent='● '+T.now2;$('lgFc').textContent='○ '+T.fc;
+  drawChart(A);
+  $('hAl').textContent=T.al;$('lTarget').textContent=T.tg;
+  if(!target)target=Math.round(A.best.p*1.05/50)*50;
+  $('target').value=target;
+  $('hBy').textContent=T.by;
+  const by=$('buyers');by.innerHTML='';
+  BUY.forEach(b=>{const e=document.createElement('div');e.className='b';const w=document.createElement('div');const nm=document.createElement('div');nm.style.fontWeight='600';nm.textContent=b[lang];const lc=document.createElement('div');lc.className='s';lc.style.cssText='font-size:14px;color:var(--mute)';lc.textContent=MK.find(m=>m.en===b.loc)[lang];w.append(nm,lc);const a=document.createElement('a');a.href='tel:'+b.tel;a.textContent=T.call;e.append(w,a);by.appendChild(e)});
+  $('foot').textContent=T.foot;
+  document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.l===lang));
+  checkAlert(A);
+}
+
+function drawChart(A){
+  const all=[...A.h,...A.fc],mn=Math.min(...all)*.985,mx=Math.max(...all)*1.015;
+  const W=320,Hh=130,px=14,py=14,n=all.length;
+  const X=i=>px+i*(W-2*px)/(n-1),Y=v=>Hh-py-(v-mn)/(mx-mn)*(Hh-2*py);
+  let s='';
+  const solid=A.h.map((v,i)=>`${i?'L':'M'}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join('');
+  const dash=[A.h[A.h.length-1],...A.fc].map((v,i)=>`${i?'L':'M'}${X(A.h.length-1+i).toFixed(1)},${Y(v).toFixed(1)}`).join('');
+  s+=`<path d="${solid}" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+  s+=`<path d="${dash}" fill="none" stroke="var(--gold)" stroke-width="3" stroke-dasharray="2 6" stroke-linecap="round"/>`;
+  A.h.forEach((v,i)=>{if(i===A.h.length-1)s+=`<circle cx="${X(i)}" cy="${Y(v)}" r="5" fill="var(--ink)"/>`});
+  A.fc.forEach((v,i)=>{s+=`<circle cx="${X(A.h.length+i)}" cy="${Y(v)}" r="4" fill="var(--card)" stroke="var(--gold)" stroke-width="2.5"/>`});
+  s+=`<text x="${X(A.h.length-1)}" y="${Y(A.h[A.h.length-1])-10}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">₹${A.h[A.h.length-1]}</text>`;
+  s+=`<text x="${X(n-1)}" y="${Y(A.fc[2])-10}" text-anchor="end" font-size="12" font-weight="700" fill="var(--ink)">₹${A.fc[2]}</text>`;
+  $('chart').innerHTML=s;
+}
+
+function checkAlert(A){
+  const hit=A.rows.filter(r=>r.p>=target).sort((a,b)=>b.p-a.p)[0];
+  const el=$('alert');
+  if(hit){el.hidden=false;el.textContent='🔔 '+t().hit(hit.m[lang],hit.p)}else el.hidden=true;
+}
+
+$('crop').addEventListener('change',e=>{crop=e.target.value;target=0;render()});
+$('target').addEventListener('input',e=>{target=+e.target.value||0;checkAlert(analyse())});
+$('sim').addEventListener('click',()=>{MK.forEach((m,i)=>{const h=H[crop][i];const last=h[h.length-1];h.push(Math.round(last*(1+(rnd()-.4)*.09)));h.shift()});render()});
+$('speak').addEventListener('click',()=>{
+  try{const u=new SpeechSynthesisUtterance($('adv').textContent+'. '+$('advSub').textContent);u.lang=t().lang;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}
+});
+document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>{lang=b.dataset.l;render()}));
+render();
+</script>
+</body>
+</html>

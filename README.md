@@ -78,5 +78,5 @@ This prototype uses **sample market data** generated in the browser, so prices a
 
 ## Author
 
-**YOUR FULL NAME**
+Shriram S
 INNOVATE INDIA Hackathon 2026 (individual participation)
